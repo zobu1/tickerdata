@@ -1,6 +1,4 @@
 import yfinance as yf
-import pandas as pd
-import numpy as np
 
 stock = input("Enter Ticker \n")
 stock = stock.upper()
