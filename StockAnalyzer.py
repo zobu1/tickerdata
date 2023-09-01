@@ -8,15 +8,15 @@ class StockAnalyzer:
         self.symbol = symbol.upper()
         self.ticker = yf.Ticker(self.symbol)
 
-    def get_time(self, len):
+    def get_time(self, length: int):
         today = datetime.today()
-        dif = timedelta(days=len)
+        dif = timedelta(days=length)
         earlier = today - (2 * dif)
         return earlier.strftime("%Y-%m-%d")
 
-    def get_data(self, len):
+    def get_data(self, length: int):
         today = datetime.today().strftime('%Y-%m-%d')
-        data = yf.download(self.symbol, start=self.get_time(len), end=today)
+        data = yf.download(self.symbol, start=self.get_time(length), end=today)
         data = pd.concat([data, pd.DataFrame({'Open': [self.get_open_price()], 'Close': [self.get_current_price()]})], ignore_index=True)
         return data
 
@@ -34,38 +34,38 @@ class StockAnalyzer:
         data = data.assign(SMA = sma)
         return data.iloc[-1]['SMA']
     
-    def get_ema(self, len):
-        data = self.get_data(len)
-        ema = ta.ema(data["Close"], length=len)
+    def get_ema(self, length: int):
+        data = self.get_data(length)
+        ema = ta.ema(data["Close"], length=length)
         data = data.assign(EMA = ema)
         return data.iloc[-1]['EMA']
 
-    def get_rsi(self, len):
-        data = self.get_data(len)
-        rsi = ta.rsi(data["Close"], length=len)
+    def get_rsi(self, length: int):
+        data = self.get_data(length)
+        rsi = ta.rsi(data["Close"], length=length)
         data = data.assign(RSI = rsi)
         return data.iloc[-1]['RSI']
 
-    def get_stdev(self, len):
-        data = self.get_data(len)
-        stdev = ta.stdev(data["Close"], length=len)
+    def get_stdev(self, length: int):
+        data = self.get_data(length)
+        stdev = ta.stdev(data["Close"], length=length)
         data = data.assign(STDEV = stdev)
         return data.iloc[-1]['STDEV']
 
-    def get_cumr(self, len):
-        data = self.get_data(len)
+    def get_cumr(self, length: int):
+        data = self.get_data(length)
         length = data.shape[0] - 1 # Get index of last row
-        cumrp = (self.get_current_price() / data.loc[length - (len - 1), 'Close'])
+        cumrp = (self.get_current_price() / data.loc[length - (length - 1), 'Close'])
         return cumrp
     
-    def get_adv(self , len): # Return Average Dollar Volume over len days in millions
-        data = self.get_data(len)
-        length = data.shape[0] - 1 # Get index of last row
-        first = length - len # Get first value
+    def get_adv(self , length: int): # Return Average Dollar Volume over length days in millions
+        data = self.get_data(length)
+        df_length = data.shape[0] - 1 # Get index of last row
+        first = df_length - length # Get first value
         total = 0
-        for i in range (first , length):
+        for i in range (first , df_length):
             total += data.loc[i , 'Close'] * data.loc[i , 'Volume']
-        return (total / len) / 1000000
+        return (total / length) / 1000000
 
 def main():
     symbol = input("Enter Ticker \n")
