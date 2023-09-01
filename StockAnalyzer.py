@@ -58,7 +58,7 @@ class StockAnalyzer:
         cumrp = (self.get_current_price() / data.loc[length - (len - 1), 'Close'])
         return cumrp
     
-    def get_adr(self , len): # Return Average Dollar Volume over len days in millions
+    def get_adv(self , len): # Return Average Dollar Volume over len days in millions
         data = self.get_data(len)
         length = data.shape[0] - 1 # Get index of last row
         first = length - len # Get first value
@@ -72,7 +72,7 @@ def main():
     analyze = StockAnalyzer(symbol)
     #print(analyze.get_data(5))
 
-    signal = input("0. Exit \n1. SMA \n2. EMA \n2. RSI \n3. STDEV \n4. CUMR\n5. ADR\n")
+    signal = input("0. Exit \n1. SMA \n2. EMA \n2. RSI \n3. STDEV \n4. CUMR\n5. ADV\n")
     if signal == "0":
         quit()
     else:
@@ -88,7 +88,7 @@ def main():
         elif signal == "5":
             print(analyze.get_cumr(len))
         elif signal == "6":
-            print(analyze.get_adr(len))
+            print(analyze.get_adv(len))
 
 if __name__ == "__main__":
     main()
