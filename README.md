@@ -11,3 +11,5 @@
 - Combination of all the individual scripts in this repo
 - Fetch DAILY data for any stock
 - Input ticker and length, and outputs real time stats
+# StockAnalyzerStatic
+- Uses static methods instead of creating an object for each ticker
