@@ -7,3 +7,7 @@
 - Data is outputted to CSV.
 # Fetch SMA
 - Grab SMA for n days
+# StockAnalyzer
+- Combination of all programs
+- Fetch DAILY data for any stock
+- Input ticker and length, and outputs real time stats
