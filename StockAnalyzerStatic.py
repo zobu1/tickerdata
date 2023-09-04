@@ -46,29 +46,40 @@ class StockAnalyzer:
         data = data.assign(RSI = rsi)
         return data.iloc[-1]['RSI']
     @staticmethod
-    def get_stdev(symbol, period):
+    def get_stdev(symbol, period): # Get Standard Deviation (Percent)
         data = StockAnalyzer.get_data(symbol, period)
         stdev = ta.stdev(data["Close"], length=period)
         data = data.assign(STDEV = stdev)
         return data.iloc[-1]['STDEV']
     @staticmethod
-    def get_cumr(symbol, period):
+    def get_cumr(symbol, period): # Get Cumulative Return (Percent)
         data = StockAnalyzer.get_data(symbol, period)
         length = data.shape[0] - 1
         cumrp = (StockAnalyzer.get_current_price(symbol) / data.loc[length - (period - 1), 'Close'])
         return cumrp
     @staticmethod
-    def get_adv(symbol, period):
+    def get_adv(symbol, period): # Get Average Daily Volume in MILLIONS
         data = StockAnalyzer.get_data(symbol, period)
         length = data.shape[0] - 1 
         first = length - period
         total = 0
         for i in range(first, length):
             total += data.loc[i, 'Close'] * data.loc[i, 'Volume']
-        return (total / period) / 1000000
+        return (total / period) / 1000000 
+    @staticmethod
+    def get_adr(symbol , period): # Get Average Daily Range
+        data = StockAnalyzer.get_data(symbol, period)
+        length = data.shape[0] - 1 
+        first = length - period
+        total = 0
+        for i in range(first, length):
+            total += data.loc[i, 'High'] / data.loc[i, 'Low']
+        return 100 * ((total / period) - 1)
+
+
 
 def main():
-    signal = input("0. Exit \n1. SMA \n2. EMA \n3. RSI \n4. STDEV \n5. CUMR\n6. ADV\n")
+    signal = input("0. Exit \n1. SMA \n2. EMA \n3. RSI \n4. STDEV \n5. CUMR\n6. ADV\n7. ADR\n")
     if signal == "0":
         quit()
     else:
@@ -86,6 +97,8 @@ def main():
             print(StockAnalyzer.get_cumr(symbol, period))
         elif signal == "6":
             print(StockAnalyzer.get_adv(symbol, period))
+        elif signal == "7":
+            print(StockAnalyzer.get_adr(symbol,period))
 
 if __name__ == "__main__":
     main()
