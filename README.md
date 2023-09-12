@@ -5,8 +5,6 @@
 - For periods of 1m, data may only be fetched from the last 7 days.
 - Less than 1d, past 60 days.
 - Data is outputted to CSV.
-# Fetch SMA
-- Grab SMA for n days
 # StockAnalyzer
 - Combination of all the individual scripts in this repo
 - Fetch DAILY data for any stock
