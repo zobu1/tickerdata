@@ -56,7 +56,7 @@ class StockAnalyzer:
         data = StockAnalyzer.get_data(symbol, period)
         length = data.shape[0] - 1
         cumrp = (StockAnalyzer.get_current_price(symbol) / data.loc[length - (period - 1), 'Close'])
-        return cumrp
+        return (cumrp - 1) * 100 # Normalize percent
     @staticmethod
     def get_adv(symbol, period): # Get Average Daily Volume in MILLIONS
         data = StockAnalyzer.get_data(symbol, period)
@@ -75,11 +75,14 @@ class StockAnalyzer:
         for i in range(first, length):
             total += data.loc[i, 'High'] / data.loc[i, 'Low']
         return 100 * ((total / period) - 1)
+    @staticmethod
+    def get_sma_return(symbol , period): # Returns arithmetic mean of return over n days in percent
+        return StockAnalyzer.get_cumr(symbol , period) / period
 
 
 
 def main():
-    signal = input("0. Exit \n1. SMA \n2. EMA \n3. RSI \n4. STDEV \n5. CUMR\n6. ADV\n7. ADR\n")
+    signal = input("0. Exit \n1. SMA \n2. EMA \n3. RSI \n4. STDEV \n5. CUMR\n6. ADV\n7. ADR\n8. SMA RETURN\n")
     if signal == "0":
         quit()
     else:
@@ -99,6 +102,8 @@ def main():
             print(StockAnalyzer.get_adv(symbol, period))
         elif signal == "7":
             print(StockAnalyzer.get_adr(symbol,period))
+        elif signal == "8":
+            print(StockAnalyzer.get_sma_return(symbol,period))
 
 if __name__ == "__main__":
     main()
